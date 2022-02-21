@@ -1,0 +1,48 @@
+body {
+  padding: 10px;
+}
+
+.search-form {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 15px;
+}
+
+.search-form button {
+  margin-left: 5px;
+}
+
+.gallery {
+  display: grid;
+  grid-gap: 15px;
+  grid-template-columns: repeat(4, 1fr);
+  justify-items: start;
+  align-items: center;
+}
+
+.is-hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.load-more {
+  display: block;
+  margin: auto;
+  opacity: 1;
+}
+.img-preview {
+  width: 300px;
+  height: 210px;
+}
+
+.photo-card .info {
+  /* display: flex; */
+  /* border: solid 1px #eee;
+  border-top: 0;
+  align-self: start; */
+}
+
+.info-item {
+  display: flex;
+}
