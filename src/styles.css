@@ -36,13 +36,6 @@ body {
   height: 210px;
 }
 
-.photo-card .info {
-  /* display: flex; */
-  /* border: solid 1px #eee;
-  border-top: 0;
-  align-self: start; */
-}
-
 .info-item {
   display: flex;
 }

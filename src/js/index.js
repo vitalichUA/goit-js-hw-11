@@ -55,9 +55,9 @@ async function makeFetchResponse(name, page) {
       lastElementArray.classList.remove("is-hidden");
     }
   } catch (error) {
-       console.log(error);
-    }
-    
+    console.log(error);
+  }
+}
     
 searchFormRef.addEventListener('submit', onSearch)
 
@@ -115,9 +115,9 @@ function onLoadMore() {
 
 
 
-function renderMarkup(hits) {
+  function renderMarkup(hits) {
     const markup = hits.map(({ webformatURL, largeImageURL, tags, likes, views, comments, downloads }) => {
-       return `<div class="photo-card">
+      return `<div class="photo-card">
   <img class="img-preview" src="${webformatURL}" alt="${tags}" loading="lazy" />
   <div class="info">
     <p class="info-item">
@@ -136,5 +136,7 @@ function renderMarkup(hits) {
 </div>`
     }
     ).join("");
+
     galleryRef.insertAdjacentHTML("beforeend", markup)
-}
+
+  }
