@@ -13,7 +13,7 @@ const submitBtnRef = document.querySelector('[type="submit"]')
 const galleryRef = document.querySelector('.gallery');
 const loadMoreBtn = document.querySelector(".load-more");
 
-galleryRef.addEventListener('click', () => {
+galleryRef.addEventListener('click', (evt) => {
   evt.preventDefault()
 });
 loadMoreBtn.addEventListener('click', debounce(onLoadMore, 300));
@@ -81,43 +81,24 @@ async function makeFetchResponse(name, page) {
 
 function onSearch(evt) {
     evt.preventDefault();
-
   if (disabled) {
     return;
   };
-  
-
   submitBtnRef.removeAttribute("disabled");
     disabled = false;
-    
   loadMoreBtn.classList.add("is-hidden");
-  
-
   const { elements } = evt.target;
     const { searchQuery } = elements;
 
   if (!searchQuery.value.trim()) {
     Notify.warning("line is empty");
      searchQuery.value = '';
-
-   
-      // galleryRef.innerHTML = '';
-   
-
     return
   };
-
-  
-    
-    
   name = searchQuery.value.trim();
   page = 1;
-
     makeFetchResponse(name, page);
-
  searchQuery.value = '';
-    
-    
 }
 
 
@@ -126,9 +107,7 @@ function onSearch(evt) {
 
 function onLoadMore() {
   loadMoreBtn.classList.add("is-hidden");
-  
   page += 1;
-
   makeFetchResponse(name, page);
 };
 
