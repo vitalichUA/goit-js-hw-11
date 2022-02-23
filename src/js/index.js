@@ -1,7 +1,11 @@
+import SimpleLightbox from 'simplelightbox';
+import 'simplelightbox/dist/simple-lightbox.min.css';
 import '../styles.css'
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import getImg from './fetchImg';
 import debounce from 'lodash.debounce';
+
+
 
 
 const searchFormRef = document.querySelector('#search-form');
@@ -9,12 +13,22 @@ const submitBtnRef = document.querySelector('[type="submit"]')
 const galleryRef = document.querySelector('.gallery');
 const loadMoreBtn = document.querySelector(".load-more");
 
+galleryRef.addEventListener('click', () => {
+  evt.preventDefault()
+});
+loadMoreBtn.addEventListener('click', debounce(onLoadMore, 300));
+searchFormRef.addEventListener('submit', onSearch)
+
+
+
 loadMoreBtn.classList.add("is-hidden");
 
 let name = '';
 let page = 1;
 let limit = 40;
 let disabled = false;
+
+let lightbox = new SimpleLightbox('.photo-card a', { captionDelay: 250, captionsData: 'alt', });
 
 async function makeFetchResponse(name, page) {
 
@@ -32,15 +46,19 @@ async function makeFetchResponse(name, page) {
     } else if (hits.length < limit && page === 1) {
       Notify.success(`Hooray! We found ${totalHits} images.`);
       loadMoreBtn.classList.add("is-hidden");
+        lightbox.refresh();
       galleryRef.innerHTML = '';
     } else if (hits.length < limit) {
       Notify.info("We're sorry, but you've reached the end of search results.");
       loadMoreBtn.classList.add("is-hidden");
-    } else if (page === 1) {
+    }
+    else if (page === 1) {
       Notify.success(`Hooray! We found ${totalHits} images.`);
       loadMoreBtn.classList.remove("is-hidden");
+        lightbox.refresh();
       galleryRef.innerHTML = '';
-    } else {
+    }
+    else {
       loadMoreBtn.classList.remove("is-hidden");
     };
 
@@ -59,7 +77,7 @@ async function makeFetchResponse(name, page) {
   }
 }
     
-searchFormRef.addEventListener('submit', onSearch)
+
 
 function onSearch(evt) {
     evt.preventDefault();
@@ -78,11 +96,12 @@ function onSearch(evt) {
   const { elements } = evt.target;
     const { searchQuery } = elements;
 
-  if (!searchQuery.value) {
+  if (!searchQuery.value.trim()) {
     Notify.warning("line is empty");
+     searchQuery.value = '';
 
    
-      galleryRef.innerHTML = '';
+      // galleryRef.innerHTML = '';
    
 
     return
@@ -91,7 +110,7 @@ function onSearch(evt) {
   
     
     
-  name = searchQuery.value;
+  name = searchQuery.value.trim();
   page = 1;
 
     makeFetchResponse(name, page);
@@ -103,7 +122,7 @@ function onSearch(evt) {
 
 
 
-loadMoreBtn.addEventListener('click', debounce(onLoadMore, 300));
+
 
 function onLoadMore() {
   loadMoreBtn.classList.add("is-hidden");
@@ -118,25 +137,34 @@ function onLoadMore() {
   function renderMarkup(hits) {
     const markup = hits.map(({ webformatURL, largeImageURL, tags, likes, views, comments, downloads }) => {
       return `<div class="photo-card">
-  <img class="img-preview" src="${webformatURL}" alt="${tags}" loading="lazy" />
+<a href="${largeImageURL}">
+
+  <img class="img-preview" src="${webformatURL}" alt="${tags}" loading="lazy" /> 
+  </a>
   <div class="info">
     <p class="info-item">
-                    <b>Likes: ${likes}</b>
+                    <b>Likes <span>${likes}</span> </b>
     </p>
     <p class="info-item">
-      <b>Views: ${views}</b>
+      <b>Views <span>${views}</span></b>
     </p>
     <p class="info-item">
-      <b>Comments: ${comments}</b>
+      <b>Comments <span>${comments}</span></b>
     </p>
     <p class="info-item">
-      <b>Downloads: ${downloads}</b>
+      <b>Downloads <span>${downloads}</span></b>
     </p>
   </div>
 </div>`
     }
     ).join("");
 
-    galleryRef.insertAdjacentHTML("beforeend", markup)
+    galleryRef.insertAdjacentHTML("beforeend", markup);
+     lightbox.refresh();
 
   }
+
+
+
+ 
+
